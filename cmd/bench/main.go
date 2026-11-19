@@ -13,10 +13,12 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 
 	"github.com/qifani35/ats-matcher/internal/eval"
+	"github.com/qifani35/ats-matcher/internal/extract"
 	"github.com/qifani35/ats-matcher/internal/match"
 	"github.com/qifani35/ats-matcher/internal/model"
 	"github.com/qifani35/ats-matcher/internal/taxonomy"
@@ -27,6 +29,7 @@ func main() {
 	dataPath := flag.String("data", "data/dataset.json", "path to the benchmark dataset")
 	inspect := flag.String("job", "", "inspect one job id in detail (e.g. J2)")
 	top := flag.Int("top", 5, "how many candidates to show per strategy when inspecting")
+	cvDir := flag.String("cv", "", "folder of CV files (pdf/docx/txt) to parse instead of dataset candidates")
 	flag.Parse()
 
 	ds, err := load(*dataPath)
@@ -50,6 +53,11 @@ func main() {
 		len(ds.Jobs), len(ds.Candidates), relCount)
 	fmt.Printf("reference year : %d (for recency decay)\n", ds.ReferenceYear)
 	fmt.Println()
+
+	if *cvDir != "" {
+		runCVMode(ds, *cvDir, *inspect, *top)
+		return
+	}
 
 	demoFuzzyTraps()
 
@@ -456,6 +464,126 @@ func printSkilllessDetail(detail map[string]map[string][]string) {
 	fmt.Println("  orang karena kata generik seperti \"developer\"; ranker berbasis id")
 	fmt.Println("  kanonik tidak bisa. Anotasi \"punya X≈Y\" menandai jebakan fuzzy klasik.")
 	fmt.Println()
+}
+
+// runCVMode parses a folder of real CV files and ranks the parsed candidates
+// against one job. There are no relevance labels for real CVs, so this mode
+// reports ranking + explanations rather than precision metrics. Inventing a
+// metric without ground truth would be worse than not reporting one.
+func runCVMode(ds *model.Dataset, dir, jobID string, top int) {
+	fmt.Println("Mode CV: parsing folder")
+	fmt.Println(strings.Repeat("=", 78))
+	fmt.Printf("folder: %s\n\n", dir)
+
+	docs, err := extract.ReadFolder(dir)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "read folder: %v\n", err)
+		os.Exit(1)
+	}
+	if len(docs) == 0 {
+		fmt.Println("tidak ada file .pdf/.docx/.txt di folder itu")
+		return
+	}
+
+	parsed := make([]extract.Parsed, 0, len(docs))
+	for _, doc := range docs {
+		p := extract.ParseDocument(doc, ds.ReferenceYear, extract.IDFromFilename)
+		parsed = append(parsed, p)
+	}
+
+	// Extraction report: this is the table a recruiter would review before
+	// trusting any ranking downstream.
+	fmt.Printf("%-26s %-10s %-22s %-26s %4s %-11s %5s\n",
+		"file", "jenis", "nama", "judul", "thn", "lokasi", "skill")
+	fmt.Println(strings.Repeat("-", 78))
+	var needOCR int
+	for _, p := range parsed {
+		kind := string(p.Doc.Kind)
+		if p.Doc.Kind == extract.KindScan {
+			needOCR++
+		}
+		name := p.Candidate.Name
+		if name == "" {
+			name = "(tidak terdeteksi)"
+		}
+		fmt.Printf("%-26s %-10s %-22s %-26s %4d %-11s %5d\n",
+			truncate(filepath.Base(p.Doc.Path), 26),
+			truncate(kind, 10),
+			truncate(name, 22),
+			truncate(p.Candidate.Title, 26),
+			p.Candidate.Years,
+			truncate(p.Candidate.Location, 11),
+			len(p.Candidate.Skills))
+		if p.Doc.Warn != "" {
+			fmt.Printf("    ! %s\n", p.Doc.Warn)
+			if p.Doc.Kind == extract.KindScan {
+				fmt.Printf("      OCR: %s\n", extract.OCRHint(p.Doc.Path))
+			}
+		}
+	}
+	if needOCR > 0 {
+		fmt.Printf("\n  %d file tanpa text layer — perlu OCR, tidak ikut diranking.\n", needOCR)
+	}
+
+	// Keep only candidates that yielded usable text.
+	cands := make([]model.Candidate, 0, len(parsed))
+	for _, p := range parsed {
+		if p.Doc.Kind == extract.KindScan || p.Doc.Kind == "error" {
+			continue
+		}
+		cands = append(cands, p.Candidate)
+	}
+	if len(cands) == 0 {
+		fmt.Println("\ntidak ada CV yang bisa diparse. Semua file perlu OCR.")
+		return
+	}
+
+	// Pick the job.
+	var job model.Job
+	if jobID != "" {
+		for _, j := range ds.Jobs {
+			if j.ID == jobID {
+				job = j
+			}
+		}
+	}
+	if job.ID == "" {
+		job = ds.Jobs[0]
+		if jobID != "" {
+			fmt.Printf("\njob %q tidak ditemukan, memakai %s\n", jobID, job.ID)
+		}
+	}
+
+	fmt.Println()
+	fmt.Println(strings.Repeat("=", 78))
+	fmt.Printf("Ranking %d CV terhadap %s — %s\n", len(cands), job.ID, job.Title)
+	fmt.Printf("  must-have: %s | nice: %s | min %d th | %s | remote=%v\n\n",
+		strings.Join(job.MustHave, ", "), strings.Join(job.NiceToHave, ", "),
+		job.MinYears, job.Location, job.Remote)
+
+	ranked := match.HybridRank(job, cands, ds)
+	limit := top
+	if len(ranked) < limit {
+		limit = len(ranked)
+	}
+	for i := 0; i < limit; i++ {
+		s := ranked[i]
+		state := ""
+		if s.Filtered != "" {
+			state = "  [FILTERED: " + s.Filtered + "]"
+		}
+		fmt.Printf("  %d. %-22s %.3f\n     %s%s\n",
+			i+1, truncate(s.CandidateID, 22), s.Score, truncate(s.Reason, 100), state)
+	}
+
+	// Show what each parsed CV actually contributed, so a wrong ranking can be
+	// traced back to a wrong parse instead of being blamed on the matcher.
+	fmt.Println()
+	fmt.Println("Skill yang terdeteksi per CV")
+	fmt.Println(strings.Repeat("-", 78))
+	for _, c := range cands {
+		fmt.Printf("  %-22s %s\n", truncate(c.ID, 22), strings.Join(c.Skills, ", "))
+	}
 }
 
 func truncate(s string, n int) string {

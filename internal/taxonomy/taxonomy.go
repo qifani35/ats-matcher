@@ -6,7 +6,10 @@
 // auditable — you can show a recruiter exactly why a skill matched.
 package taxonomy
 
-import "strings"
+import (
+	"sort"
+	"strings"
+)
 
 // Skill is a canonical concept.
 type Skill struct {
@@ -288,4 +291,29 @@ func Expand(ids []string) map[string]float64 {
 // banner the bench prints at startup.
 func Size() (skillCount, aliasCount int) {
 	return len(skills), len(aliasIndex)
+}
+
+// Alias is one spelling mapped to a canonical id.
+type Alias struct {
+	Text string // normalized alias, e.g. "node.js"
+	ID   string // canonical id, e.g. "be.node"
+}
+
+// Aliases returns every alias, longest first.
+//
+// Order matters for detection: the caller blanks out each match, so a long
+// alias such as "machine learning" is consumed before the short alias "ml"
+// can match inside it. "C++" must also win over "C".
+func Aliases() []Alias {
+	out := make([]Alias, 0, len(aliasIndex))
+	for text, id := range aliasIndex {
+		out = append(out, Alias{Text: text, ID: id})
+	}
+	sort.SliceStable(out, func(i, j int) bool {
+		if len(out[i].Text) != len(out[j].Text) {
+			return len(out[i].Text) > len(out[j].Text)
+		}
+		return out[i].Text < out[j].Text
+	})
+	return out
 }

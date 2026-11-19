@@ -18,10 +18,53 @@ L4  explanation        per-component reasons, printable per candidate
 ## Run it
 
 ```bash
-go run ./cmd/bench                  # full comparison
-go run ./cmd/bench -job J6 -top 4   # inspect one job in detail
-go run ./cmd/bench -data my.json    # your own dataset
+go run ./cmd/bench                        # full comparison on the labelled dataset
+go run ./cmd/bench -job J6 -top 4         # inspect one job in detail
+go run ./cmd/bench -data my.json          # your own labelled dataset
+go run ./cmd/bench -cv ./cvs -job J4      # parse a folder of CVs and rank them
 ```
+
+## Reading CV files (PDF / DOCX)
+
+`-cv <folder>` walks a directory and parses every `.pdf`, `.docx`, `.txt`:
+
+```
+file                       jenis      nama                   judul                       thn lokasi      skill
+dedi-kurniawan.docx        docx       Dedi Kurniawan         Android Developer             3 Jakarta         3
+fajar-setiawan.pdf         pdf-text   Fajar Setiawan         Embedded Engineer             2 Bandung         3
+hasil-scan.pdf             needs-ocr  (tidak terdeteksi)                                   0                 0
+    ! no text layer: scanned PDF or image-only export, needs OCR
+      OCR: tesseract "/tmp/cvtest/hasil-scan.pdf" stdout -l eng+ind
+rina-pratiwi.pdf           pdf-text   Rina Pratiwi           Senior Machine Learning E…    6 Jakarta         5
+```
+
+How each format is handled:
+
+| Format | Method | Accuracy |
+|---|---|---|
+| **DOCX** | zip → `word/document.xml` → text nodes | exact, stdlib only |
+| **PDF with text layer** | FlateDecode the content streams, read `Tj`/`TJ` strings, rebuild lines from `Td`/`T*`/`Tm` | good for Word/LibreOffice/Canva exports |
+| **Scanned PDF / photo** | detected as `needs-ocr`, **no fields fabricated**, OCR command printed | needs Tesseract |
+
+Two decisions worth knowing about:
+
+- **A PDF has no newlines.** Line breaks are cursor moves (`Td`, `TD`, `T*`,
+  `Tm`, `TL`). The first version joined every string with a space, which
+  collapsed the page into one long line and made the name undetectable. The
+  parser now splits the stream on those operators and treats each chunk as a
+  line.
+- **A file with no text layer produces an empty candidate, not a guess.**
+  Inventing a location and seniority for a scan is how ATS systems silently
+  corrupt data.
+
+Field extraction is deterministic and every guess records its reason
+(`pengalaman: jumlah rentang tahun (4 tahun)`, `nama: baris pertama yang
+berbentuk nama`). There is no LLM in this path on purpose: a recruiter must be
+able to audit "why 5 years?".
+
+Skill detection matches taxonomy aliases longest-first and blanks each match, so
+`C++` is consumed before `C` can match inside it, and `machine learning` before
+`ml`. The `C, C++, Linux` result above is that rule working.
 
 ## What the benchmark prints
 
