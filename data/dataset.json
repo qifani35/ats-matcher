@@ -1,0 +1,226 @@
+{
+  "reference_year": 2026,
+  "jobs": [
+    {
+      "id": "J1",
+      "title": "Backend Engineer (Go)",
+      "description": "Bangun layanan backend dengan Go untuk produk pembayaran. Fokus pada API yang stabil, latensi rendah, dan observability.",
+      "seniority": "mid",
+      "min_years": 3,
+      "location": "Jakarta",
+      "remote": true,
+      "must_have": ["Go", "REST API", "PostgreSQL"],
+      "nice_to_have": ["Docker", "Kubernetes"]
+    },
+    {
+      "id": "J2",
+      "title": "Frontend Developer (React)",
+      "description": "Kembangkan dashboard internal dengan React dan TypeScript. Kolaborasi erat dengan tim desain.",
+      "seniority": "mid",
+      "min_years": 2,
+      "location": "Jakarta",
+      "remote": false,
+      "must_have": ["React", "JavaScript", "CSS"],
+      "nice_to_have": ["TypeScript"]
+    },
+    {
+      "id": "J3",
+      "title": "Machine Learning Engineer",
+      "description": "Bangun pipeline model untuk rekomendasi. Eksperimen, evaluasi, dan deploy model ke produksi.",
+      "seniority": "senior",
+      "min_years": 4,
+      "location": "Jakarta",
+      "remote": true,
+      "must_have": ["Machine Learning", "Python", "SQL"],
+      "nice_to_have": ["LLM Engineering"]
+    },
+    {
+      "id": "J4",
+      "title": "Android Developer",
+      "description": "Kembangkan aplikasi Android untuk merchant. Fokus pada performa dan stabilitas rilis.",
+      "seniority": "mid",
+      "min_years": 2,
+      "location": "Jakarta",
+      "remote": false,
+      "must_have": ["Android", "Kotlin"],
+      "nice_to_have": ["Flutter"]
+    },
+    {
+      "id": "J5",
+      "title": "DevOps Engineer",
+      "description": "Kelola cluster Kubernetes, pipeline CI/CD, dan infrastruktur sebagai kode.",
+      "seniority": "senior",
+      "min_years": 4,
+      "location": "Jakarta",
+      "remote": true,
+      "must_have": ["Docker", "Kubernetes", "CI/CD"],
+      "nice_to_have": ["Terraform", "AWS"]
+    },
+    {
+      "id": "J6",
+      "title": "Java Backend Developer",
+      "description": "Kembangkan service Java dengan Spring Boot untuk sistem internal perbankan.",
+      "seniority": "mid",
+      "min_years": 3,
+      "location": "Jakarta",
+      "remote": false,
+      "must_have": ["Java", "Spring Boot", "SQL"],
+      "nice_to_have": ["Microservices"]
+    }
+  ],
+  "candidates": [
+    {
+      "id": "C01", "name": "Budi", "title": "Backend Engineer", "years": 5,
+      "location": "Jakarta", "willing_remote": true,
+      "summary": "Backend engineer untuk platform pembayaran, terbiasa menangani trafik tinggi.",
+      "skills": ["Go", "golang", "REST API", "PostgreSQL", "Docker", "Redis"],
+      "last_used_year": {"Go": 2026, "REST API": 2026, "PostgreSQL": 2026, "Docker": 2025}
+    },
+    {
+      "id": "C02", "name": "Sari", "title": "Frontend Developer", "years": 3,
+      "location": "Jakarta", "willing_remote": true,
+      "summary": "Frontend developer, fokus pada design system dan komponen reusable.",
+      "skills": ["React", "reactjs", "JavaScript", "TypeScript", "CSS", "Tailwind"],
+      "last_used_year": {"React": 2026, "JavaScript": 2026, "CSS": 2026}
+    },
+    {
+      "id": "C03", "name": "Andi", "title": "Java Developer", "years": 4,
+      "location": "Jakarta", "willing_remote": false,
+      "summary": "Java developer untuk sistem perbankan, terbiasa dengan transaksi besar.",
+      "skills": ["Java", "Spring Boot", "SQL", "Microservices", "Hibernate"],
+      "last_used_year": {"Java": 2026, "Spring Boot": 2026, "SQL": 2025}
+    },
+    {
+      "id": "C04", "name": "Rina", "title": "Senior Machine Learning Engineer", "years": 6,
+      "location": "Jakarta", "willing_remote": true,
+      "summary": "Machine learning engineer, membangun model rekomendasi dan ranking.",
+      "skills": ["Python", "Machine Learning", "SQL", "LLM", "PyTorch"],
+      "last_used_year": {"Machine Learning": 2026, "Python": 2026, "LLM": 2026}
+    },
+    {
+      "id": "C05", "name": "Dedi", "title": "Android Developer", "years": 3,
+      "location": "Jakarta", "willing_remote": false,
+      "summary": "Android developer, fokus pada aplikasi merchant dan stabilitas rilis.",
+      "skills": ["Android", "Kotlin", "Jetpack Compose", "REST API"],
+      "last_used_year": {"Android": 2026, "Kotlin": 2026}
+    },
+    {
+      "id": "C06", "name": "Eka", "title": "Senior DevOps Engineer", "years": 7,
+      "location": "Jakarta", "willing_remote": true,
+      "summary": "DevOps engineer, mengelola banyak cluster dan pipeline otomatis.",
+      "skills": ["Docker", "Kubernetes", "k8s", "CI/CD", "Terraform", "AWS", "Linux"],
+      "last_used_year": {"Docker": 2026, "Kubernetes": 2026, "CI/CD": 2026, "Terraform": 2025}
+    },
+    {
+      "id": "C07", "name": "Fajar", "title": "Embedded Engineer", "years": 2,
+      "location": "Bandung", "willing_remote": true,
+      "summary": "Embedded engineer, pemrograman tingkat rendah pada perangkat keras.",
+      "skills": ["C", "C++", "Embedded", "Linux"],
+      "last_used_year": {"C": 2026, "C++": 2026}
+    },
+    {
+      "id": "C08", "name": "Gita", "title": "Backend Developer", "years": 3,
+      "location": "Jakarta", "willing_remote": false,
+      "summary": "Backend developer pada ekosistem .NET untuk aplikasi enterprise.",
+      "skills": ["C#", "dotnet", "ASP.NET", "SQL Server"],
+      "last_used_year": {"C#": 2026, "dotnet": 2026}
+    },
+    {
+      "id": "C09", "name": "Hana", "title": "Fullstack Developer", "years": 4,
+      "location": "Jakarta", "willing_remote": true,
+      "summary": "Fullstack developer, banyak mengerjakan aplikasi internal.",
+      "skills": ["Node.js", "nodejs", "JavaScript", "Express", "MySQL", "React"],
+      "last_used_year": {"Node.js": 2026, "JavaScript": 2026, "MySQL": 2025}
+    },
+    {
+      "id": "C10", "name": "Irwan", "title": "Backend Engineer (Go)", "years": 5,
+      "location": "Bandung", "willing_remote": false,
+      "summary": "Backend engineer dengan Go, terbiasa dengan event-driven architecture.",
+      "skills": ["Go", "gRPC", "REST API", "PostgreSQL", "Docker", "Kafka"],
+      "last_used_year": {"Go": 2026, "gRPC": 2025, "PostgreSQL": 2026}
+    },
+    {
+      "id": "C11", "name": "Joko", "title": "Mobile Developer", "years": 2,
+      "location": "Jakarta", "willing_remote": false,
+      "summary": "Mobile developer dengan React Native untuk aplikasi konsumen.",
+      "skills": ["React Native", "JavaScript", "React", "TypeScript"],
+      "last_used_year": {"React Native": 2026, "JavaScript": 2026}
+    },
+    {
+      "id": "C12", "name": "Kiki", "title": "Data Engineer", "years": 4,
+      "location": "Jakarta", "willing_remote": true,
+      "summary": "Data engineer, membangun pipeline ETL harian.",
+      "skills": ["Python", "SQL", "ETL", "Airflow", "BigQuery"],
+      "last_used_year": {"Python": 2026, "SQL": 2026, "ETL": 2026}
+    },
+    {
+      "id": "C13", "name": "Lukman", "title": "Frontend Developer", "years": 2,
+      "location": "Jakarta", "willing_remote": false,
+      "summary": "Frontend developer, fokus pada animasi dan detail UI.",
+      "skills": ["Vue", "vuejs", "JavaScript", "CSS", "Sass"],
+      "last_used_year": {"Vue": 2026, "JavaScript": 2026, "CSS": 2026}
+    },
+    {
+      "id": "C14", "name": "Mila", "title": "Android Developer", "years": 3,
+      "location": "Jakarta", "willing_remote": false,
+      "summary": "Android developer, aplikasi internal dengan Java.",
+      "skills": ["Android", "Java", "SQLite"],
+      "last_used_year": {"Android": 2025, "Java": 2025}
+    },
+    {
+      "id": "C15", "name": "Nanda", "title": "DevOps Engineer", "years": 2,
+      "location": "Jakarta", "willing_remote": true,
+      "summary": "DevOps engineer muda, menangani deployment harian.",
+      "skills": ["Docker", "Kubernetes", "GitLab CI"],
+      "last_used_year": {"Docker": 2026, "Kubernetes": 2025}
+    },
+    {
+      "id": "C16", "name": "Omar", "title": "Web Developer", "years": 5,
+      "location": "Surabaya", "willing_remote": false,
+      "summary": "Web developer untuk situs company profile dan toko online.",
+      "skills": ["PHP", "Laravel", "MySQL", "jQuery"],
+      "last_used_year": {"PHP": 2025, "Laravel": 2025}
+    },
+    {
+      "id": "C17", "name": "Putri", "title": "Machine Learning Engineer", "years": 3,
+      "location": "Jakarta", "willing_remote": true,
+      "summary": "ML engineer dengan fokus computer vision untuk inspeksi kualitas.",
+      "skills": ["Python", "Machine Learning", "Computer Vision", "OpenCV", "SQL"],
+      "last_used_year": {"Machine Learning": 2026, "Computer Vision": 2026}
+    },
+    {
+      "id": "C18", "name": "Qori", "title": "Mobile Developer", "years": 2,
+      "location": "Jakarta", "willing_remote": false,
+      "summary": "Mobile developer dengan Flutter untuk aplikasi kasir.",
+      "skills": ["Flutter", "Dart", "Android"],
+      "last_used_year": {"Flutter": 2026, "Dart": 2026}
+    }
+  ],
+  "labels": [
+    { "job_id": "J1", "candidate_id": "C01", "relevant": true, "why": "Go + REST + Postgres, 5 tahun" },
+    { "job_id": "J1", "candidate_id": "C10", "relevant": true, "why": "Go + gRPC + Postgres, tapi Bandung dan tidak mau remote" },
+    { "job_id": "J1", "candidate_id": "C09", "relevant": false, "why": "Node/Express, bukan Go" },
+    { "job_id": "J1", "candidate_id": "C03", "relevant": false, "why": "Java, bahasa berbeda" },
+
+    { "job_id": "J2", "candidate_id": "C02", "relevant": true, "why": "React + JS + CSS, sangat cocok" },
+    { "job_id": "J2", "candidate_id": "C13", "relevant": true, "why": "Vue, tapi kuat di JS/CSS frontend" },
+    { "job_id": "J2", "candidate_id": "C03", "relevant": false, "why": "Java bukan JavaScript — jebakan fuzzy" },
+    { "job_id": "J2", "candidate_id": "C08", "relevant": false, "why": "C# bukan JavaScript — jebakan fuzzy" },
+    { "job_id": "J2", "candidate_id": "C11", "relevant": true, "why": "React Native, JS/React kuat" },
+
+    { "job_id": "J3", "candidate_id": "C04", "relevant": true, "why": "ML + Python + SQL, 6 tahun, punya LLM" },
+    { "job_id": "J3", "candidate_id": "C17", "relevant": true, "why": "ML + Python + SQL, tapi 3 tahun (di bawah minimum)" },
+    { "job_id": "J3", "candidate_id": "C12", "relevant": false, "why": "Data engineer, tidak membangun model" },
+
+    { "job_id": "J4", "candidate_id": "C05", "relevant": true, "why": "Android + Kotlin" },
+    { "job_id": "J4", "candidate_id": "C14", "relevant": true, "why": "Android + Java (Kotlin belum, tapi relevan)" },
+    { "job_id": "J4", "candidate_id": "C18", "relevant": false, "why": "Flutter, bukan native Android" },
+
+    { "job_id": "J5", "candidate_id": "C06", "relevant": true, "why": "Docker/K8s/CI-CD, 7 tahun" },
+    { "job_id": "J5", "candidate_id": "C15", "relevant": true, "why": "Docker/K8s tapi baru 2 tahun (di bawah minimum)" },
+
+    { "job_id": "J6", "candidate_id": "C03", "relevant": true, "why": "Java + Spring Boot + SQL" },
+    { "job_id": "J6", "candidate_id": "C02", "relevant": false, "why": "JavaScript bukan Java — jebakan fuzzy" },
+    { "job_id": "J6", "candidate_id": "C08", "relevant": false, "why": "C#/.NET, bukan Java" }
+  ]
+}
